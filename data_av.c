@@ -8,7 +8,10 @@
 
 
 void process_file(char** arg) {
-    FILE *file = fopen(arg[1],"r");
+    //FILE* file = fopen(arg[1],"r");
+
+    char const* const fileName = arg[1];
+    FILE *file = fopen(fileName, "r");
 
     if(file == NULL) {
         printf("Error\n");
@@ -16,82 +19,92 @@ void process_file(char** arg) {
     }
 
     printf("%s\n", arg[1]);
-    //printf("%s", *file);
-    // ssize_t read;
-    // char* data = NULL;
-    // char* line = NULL;
-    // printf("here\n");
-    // while((read = getline(&line, 0, file)) != EOF) {
-    //     printf("%s\n", line);
-    //     data = strtok(line, " ");
-    //     break;
-    // }
-    // while(data != NULL) {
-    //     printf("%s\n", data);
-    //     data = strtok(NULL, " ");
-    // }
 
     fseek(file, 0, SEEK_END);
     int size  = ftell(file);
     fseek(file, 0, SEEK_SET);
 
 
-    int lines  = 0;
-    while(!feof(file)) {
-        char ch = fgetc(file);
-        if(ch == '\n'){
-            lines++;
-        }
-    }
-    file = fopen(arg[1], "r");
-    //unsigned char buf[sizeof(char)*lines+lines];
-    
+    // int lines  = 0;
+    // while(!feof(file)) {
+    //     char ch = fgetc(file);
+    //     if(ch == '\n'){
+    //         lines++;
+    //     }
+    // }
+
     size = size * sizeof(char);
     unsigned char buf[size];
-    printf("size  is %d\n", size);
-    printf("buff size is %d\n", sizeof(buf));
+    // printf("size  is %d\n", size);
+    // printf("buff size is %d\n", sizeof(buf));
 
-    int data[size];
+    // int data[size];
 
-    int i =  0;
-    printf("here\n");
-    if(buf){
-        fread(buf, sizeof(buf), 1, file);
-        //printf("%s\n", buf);
-        printf("size of buf is %d\n", sizeof(buf));
+    // int i =  0;
+    // printf("here\n");
+    // if(buf){
+    //     fread(buf, sizeof(buf), 1, file);
+    //     //printf("%s\n", buf);
+    //     printf("size of buf is %d\n", sizeof(buf));
+    // }
+    // char* str = strtok(buf, "\n");
+    // char* copyStr = str;
+    // printf("%s\n", copyStr);
+    // char* bingStr = strtok(copyStr, " ");
+    // printf("bingStr is %s\n", bingStr);
+    // printf("here\n");
+    // double minTemp = 1000000;
+    // double maxTemp = -1000000;
+    // char subStr[5];
+    // while(str != NULL) {
+    //     //printf("token is %s\n", str);
+    //     //printf("str length is %d\n", sizeof(str));
+    //     memcpy(subStr, str, 4);
+    //     subStr[4]  = '\0';
+    //     //printf("substr is %s\n", subStr);
+
+    //     if((double)(*subStr) > maxTemp) {
+    //         printf("substr in double is %d\n", (double)(*subStr));
+    //         maxTemp  = (double)(*subStr);
+    //     }
+
+    //     // char* copyStr = str;
+    //     // char* subStr = strtok(copyStr, "\n");
+    //     //printf("substr is %s\n", subStr);
+    //     //subStr = strtok(NULL, "\n");
+    //     str = strtok(NULL, "\n");   //should go line  by line
+    // }
+
+    char line[500];
+    float data[2];
+
+    float maxTemp = -10000000;
+    float minTemp = 10000000;
+    int entryCount = 0;
+    float averageTemp = 0;
+    printf("Size is %d\n", size);
+    if(file == NULL) {
+        return;
     }
-    char* str = strtok(buf, "\n");
-    char* copyStr = str;
-    printf("%s\n", copyStr);
-    char* bingStr = strtok(copyStr, " ");
-    printf("bingStr is %s\n", bingStr);
-    printf("here\n");
-    double minTemp = 1000000;
-    double maxTemp = -1000000;
-    char subStr[5];
-    while(str != NULL) {
-        //printf("token is %s\n", str);
-        //printf("str length is %d\n", sizeof(str));
-        memcpy(subStr, str, 4);
-        subStr[4]  = '\0';
-        //printf("substr is %s\n", subStr);
-
-        if((double)(*subStr) > maxTemp) {
-            printf("substr in double is %d\n", (double)(*subStr));
-            maxTemp  = (double)(*subStr);
+    while(fgets(line, sizeof(line), file)) {
+        sscanf(line, "%f %f", &data[0], &data[1]);
+        if(data[0] > maxTemp) {
+            maxTemp  = data[0];
         }
-
-        // char* copyStr = str;
-        // char* subStr = strtok(copyStr, "\n");
-        //printf("substr is %s\n", subStr);
-        //subStr = strtok(NULL, "\n");
-        str = strtok(NULL, "\n");   //should go line  by line
+        if(data[1] < minTemp) {
+            minTemp = data[1];
+        }
+        averageTemp += data[0] + data[1];
+        entryCount++;
+        //printf("%s", line);
     }
 
     printf("\n");
     printf("max temp is %f\n", maxTemp);
     printf("min temp is %f\n", minTemp);
-    printf("lines is %d\n", lines);
+    printf("average is %f\n", averageTemp/entryCount);
+    printf("entry  count is %d\n", entryCount);
+    //printf("lines is %d\n", lines);
     fclose(file);
 }
 
