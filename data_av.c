@@ -19,7 +19,7 @@ pthread_mutex_t mutex;
  */ 
 void inputError() {
     printf("\n");
-    printf("Improper command. Please only input the following command:\n");
+    printf("Improper command. Please only input the following commands:\n");
     printf("    ./data_av       -> Single-threaded mode\n");
     printf("    ./data_av -m    -> Multi-threaded mode\n");
     printf("\n");
