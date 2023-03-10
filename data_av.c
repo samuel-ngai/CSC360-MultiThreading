@@ -15,7 +15,18 @@ float averageTemp;
 pthread_mutex_t mutex;
 
 /**
- * Prints out our file name, temperature variables, and number of entries.
+ * Function to print out errors when the user submits an unprogrammed input when executing ./data_av
+ */ 
+void inputError() {
+    printf("\n");
+    printf("Improper command. Please only input the following command:\n");
+    printf("    ./data_av       -> Single-threaded mode\n");
+    printf("    ./data_av -m    -> Multi-threaded mode\n");
+    printf("\n");
+}
+
+/**
+ * Function that prints out our file name, temperature variables, and number of entries.
  */
 void printData(char* fileName, float maximumTemp,  float minimumTemp, int entries, float averageTemp) {
     printf("===================================================\n");
@@ -106,6 +117,10 @@ main(int argc, char* argv[])
 
     pthread_mutex_init(&mutex,NULL);
     start_t = clock();
+    if(argc > 2)  {
+        inputError();
+        return 1;
+    }
     if(argc == 2) {
         pthread_t tid[10];
         char* isMultiThreading = argv[1];
@@ -132,6 +147,9 @@ main(int argc, char* argv[])
             printf("Total Multithreading time is %f\n", total_t);
             printf("\n");
             return 0;
+        } else {
+            inputError();
+            return 1;
         }
     }
     pthread_t tid;
