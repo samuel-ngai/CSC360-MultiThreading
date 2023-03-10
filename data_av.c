@@ -8,34 +8,56 @@
 #include <pthread.h>
 #include <time.h>
 
+float maxTemp;
+float minTemp;
+int entryCount;
+float averageTemp;
 
+char line[500];
+float data[2];
+// float maxTemp = -1000;
+// float minTemp = 1000;
+// int entryCount = 0;
+// float averageTemp = 0;
+
+pthread_mutex_t mutex;
+
+/**
+ * 
+ */
+void printData(char* fileName, float maximumTemp,  float minimumTemp, int entries, float averageTemp) {
+    printf("===file is %s===\n", fileName);
+    printf("max temp is %0.1f\n", maximumTemp);
+    printf("min temp is %0.1f\n", minimumTemp);
+    printf("average is %0.1f\n", averageTemp/entries);
+    printf("entry  count is %d\n", entries);
+}
+
+/**
+ * 
+ */ 
 void* process_file(char* fileName) {
-    //FILE* file = fopen(arg[1],"r");
-    //char const* const fileName = arg[1];
-    //char const* const fileName = arg;
-    //printf("filename is %s\n", fileName);
     FILE* file = fopen(fileName, "r");
     if(file == NULL) {
         printf("Error\n");
         exit(0);
     }
 
-    char line[500];
-    float data[2];
-    float maxTemp = -1000;
-    float minTemp = 1000;
-    int entryCount = 0;
-    float averageTemp = 0;
+    // char line[500];
+    // float data[2];
+    pthread_mutex_lock(&mutex);
+    maxTemp = -1000;
+    minTemp = 1000;
+    entryCount = 0;
+    averageTemp = 0;
 
     if(file == NULL) {
         return 0;
     }
+    //pthread_mutex_lock(&mutex);
     while(fgets(line, sizeof(line), file)) {
         sscanf(line, "%f %f", &data[0], &data[1]);
-        // printf("data[0] is %f\n", data[0]);
-        // printf("maxTemp is %f\n", maxTemp);
-        // printf("data[1] is %f\n", data[1]);
-        // printf("minTemp is %f\n", minTemp);
+
         if(data[0] > maxTemp) {
             maxTemp = data[0];
         }
@@ -45,17 +67,16 @@ void* process_file(char* fileName) {
         averageTemp += data[0] + data[1];
         entryCount++;
     }
-    entryCount -= 1; //offset because of the first starting label
+    entryCount -= 1;
     printf("\n");
-    printf("===file is %s===\n", fileName);
-    printf("max temp is %f\n", maxTemp);
-    printf("min temp is %f\n", minTemp);
-    printf("average is %f\n", averageTemp/entryCount);
-    printf("entry  count is %d\n", entryCount);
+    printData(fileName,maxTemp,minTemp,entryCount,averageTemp);
     fclose(file);
+    pthread_mutex_unlock(&mutex);
 }
 
-
+/**
+ * 
+ */ 
 int
 main(int argc, char* argv[])
 {
@@ -74,12 +95,9 @@ main(int argc, char* argv[])
         "data_files/Victoria.dat",
         "data_files/Winnipeg.dat"
     };
-    
-    printf("here\n");
+    pthread_mutex_init(&mutex,NULL);
     start_t = clock();
-
     if(argc == 2) {
-        printf("here2\n");
         pthread_t tid[10];
         char* isMultiThreading = "";
         isMultiThreading = argv[1];
@@ -91,7 +109,6 @@ main(int argc, char* argv[])
                     return 1;
                 }
             }
-            printf("here4\n");
             for(int i = 0; i<10; i++) {
                 int result  = pthread_join(tid[i], NULL);
                 if(result) {
@@ -110,15 +127,14 @@ main(int argc, char* argv[])
     pthread_t tid;
     int choices[10] = {0,1,2,3,4,5,6,7,8,9};
     int result;
-    printf("here2\n");
     for(int i = 0; i<10; i++) {
         result = pthread_create(&tid, NULL, process_file, filePath[choices[i]]);
         if(result != 0) {
             printf("single threading failed\n");
             return 1;
         }
+        wait(1);
     }
-    printf("here3\n");
     result = pthread_join(tid, NULL);
     if(result != 0) {
         printf("error in joining\n");
