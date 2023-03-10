@@ -154,7 +154,6 @@ main(int argc, char* argv[])
     }
     pthread_t tid;
     for(int i = 0; i<10; i++) {
-        //int createThread = pthread_create(&tid, NULL, process_file, filePath[i]);
         int createThread = pthread_create(&tid, NULL, threadBuffer, filePath[i]);
         if(createThread) {
             printf("Error in creating thread.\n");
