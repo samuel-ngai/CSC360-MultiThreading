@@ -4,7 +4,7 @@ Assignment 2 for UVic CSC360, Introduction to Operating Systems
 Samuel Ngai, V00917462
 
 ## How to run:
-Compile data_av with "*make*".
+Compile data_av.c with "*make*".
 Execute with "*./data_av*" or "*./data_av -m*" for multithreading mode.
 
 ## Implementation
