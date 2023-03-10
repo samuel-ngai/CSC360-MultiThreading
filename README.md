@@ -7,6 +7,7 @@ Samuel Ngai, V00917462
 Compile data_av with "*make*".
 Execute with "*./data_av*" or "*./data_av -m*" for multithreading mode.
 
+## Implementation
 This program makes use of threads to parse maximum and minimum yearly temperatures of ten data files given in our *data_files* folder to calculate the overall maximum, minimum, and average overall temperatures of each city.
 
 In singlethreaded mode, we simply utilize a single thread to parse a file, and then reuse the same thread to parse the next. 
