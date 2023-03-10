@@ -32,25 +32,22 @@ void printData(char* fileName, float maximumTemp,  float minimumTemp, int entrie
 /**
  * Given a fileName, we open and parse the file, calculating the maximum, minimum, 
  * and average temperatures along with number of entries.
- * Utilizes mutexes in the case of multithreaded mode so that no two threads can be 
- * parsing and editing our global temperature variables at the same time.
+ * This function is our 'critical section'.
  */ 
-void* process_file(char* fileName) {
+void process_file(char* fileName) {
     FILE* file = fopen(fileName, "r");
     if(file == NULL) {
         printf("Error\n");
         exit(0);
     }
 
-    //Start of our critical section
-    pthread_mutex_lock(&mutex);
     maxTemp = -1000;
     minTemp = 1000;
     entryCount = 0;
     averageTemp = 0;
 
     if(file == NULL) {
-        return 0;
+        return;
     }
     while(fgets(line, sizeof(line), file)) {
         sscanf(line, "%f %f", &data[0], &data[1]);
@@ -68,8 +65,18 @@ void* process_file(char* fileName) {
 
     printData(fileName,maxTemp,minTemp,entryCount,averageTemp);
     fclose(file);
+}
+
+/**
+ * A buffer function for threading, utilizing mutexes to create a critical
+ * section so that no two threads can be parsing, editing, and printing our 
+ * global variables at the same time.
+ */
+void* threadBuffer(void* arg) {
+    pthread_mutex_lock(&mutex);
+    process_file((char*) arg);
     pthread_mutex_unlock(&mutex);
-    //End of critical section
+    return NULL;
 }
 
 /**
@@ -106,7 +113,7 @@ main(int argc, char* argv[])
         char* isMultiThreading = argv[1];
         if(strcmp(isMultiThreading, "-m") == 0) {
             for(int i = 0; i<10; i++) {
-                int createThread = pthread_create(&tid[i], NULL, process_file, filePath[i]);
+                int createThread = pthread_create(&tid[i], NULL, threadBuffer, filePath[i]);
                 if(createThread) {
                     printf("Error in creating threads.\n");
                     return 1;
@@ -122,16 +129,17 @@ main(int argc, char* argv[])
             end_t = clock();
             total_t = (double)(end_t-start_t)/CLOCKS_PER_SEC;
             elapsed_t = end_t-start_t;
-            // printf("multithread start_t is %ld\n", start_t);
-            // printf("multithread end_t is %ld\n", end_t);
+        
             printf("Elapsed time: %ld clocks\n", elapsed_t);
-            printf("total Multithreading time is %f\n", total_t);
+            printf("Total Multithreading time is %f\n", total_t);
+            printf("\n");
             return 0;
         }
     }
     pthread_t tid;
     for(int i = 0; i<10; i++) {
-        int createThread = pthread_create(&tid, NULL, process_file, filePath[i]);
+        //int createThread = pthread_create(&tid, NULL, process_file, filePath[i]);
+        int createThread = pthread_create(&tid, NULL, threadBuffer, filePath[i]);
         if(createThread) {
             printf("Error in creating thread.\n");
             return 1;
@@ -146,9 +154,9 @@ main(int argc, char* argv[])
     end_t = clock();
     total_t = (double)(end_t-start_t)/CLOCKS_PER_SEC;
     elapsed_t = end_t-start_t;
-    // printf("singlethread start_t is %ld\n", start_t);
-    // printf("singlethread end_t is %ld\n", end_t);
+   
     printf("Elapsed time: %ld clocks\n", elapsed_t);
-    printf("total singlethreading time is %f\n", total_t);
+    printf("Total singlethreading time is %f\n", total_t);
+    printf("\n");
 	return 0;
 }
