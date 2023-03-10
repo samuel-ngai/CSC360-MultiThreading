@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include <unistd.h>
 #include <limits.h>
 #include <pthread.h>
@@ -120,7 +118,7 @@ main(int argc, char* argv[])
                 }
             }
             for(int i = 0; i<10; i++) {
-                int joinThread  = pthread_join(tid[i], NULL);
+                int joinThread = pthread_join(tid[i], NULL);
                 if(joinThread) {
                     printf("Error in joining multiple threads.\n");
                     return 1;
