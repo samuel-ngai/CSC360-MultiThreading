@@ -20,7 +20,7 @@ pthread_mutex_t mutex;
 void inputError() {
     printf("\n");
     printf("Improper command. Please only input the following commands:\n");
-    printf("    ./data_av       -> Single-threaded mode\n");
+    printf("    ./data_av       -> Regular mode\n");
     printf("    ./data_av -m    -> Multi-threaded mode\n");
     printf("\n");
 }
@@ -121,6 +121,8 @@ main(int argc, char* argv[])
         inputError();
         return 1;
     }
+
+    //Multithreading mode
     if(argc == 2) {
         pthread_t tid[10];
         char* isMultiThreading = argv[1];
@@ -152,26 +154,19 @@ main(int argc, char* argv[])
             return 1;
         }
     }
+    
+    //Regular mode
     pthread_t tid;
     for(int i = 0; i<10; i++) {
-        int createThread = pthread_create(&tid, NULL, threadBuffer, filePath[i]);
-        if(createThread) {
-            printf("Error in creating thread.\n");
-            return 1;
-        }
+        process_file(filePath[i]);
         usleep((useconds_t)0.0001);
-    }
-    int joinThread = pthread_join(tid, NULL);
-    if(joinThread) {
-        printf("Error in joining single thread.\n");
-        return 1;
     }
     end_t = clock();
     total_t = (double)(end_t-start_t)/CLOCKS_PER_SEC;
     elapsed_t = end_t-start_t;
    
     printf("Elapsed time: %ld clocks\n", elapsed_t);
-    printf("Total singlethreading time is %f\n", total_t);
+    printf("Total time is %f\n", total_t);
     printf("\n");
 	return 0;
 }
