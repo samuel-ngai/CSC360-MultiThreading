@@ -16,9 +16,9 @@ In multithreaded mode, we utilize ten threads (one for each city). To avoid over
 
 In addition to simply calculating maximum, minimum, and average temperatures and entry counts, we calculate the number of clock cycles utilizing  *clock()* and the overall time our system takes to complete all our tasks. We achieve this by taking the number of clock cycles at the beginning of our regular or multithreading tasks and subtracting it from our ending number of clock cycles. We then divide this number by *CLOCKS_PER_SEC* to obtain the total time taken for our computation.
 
-## Observations (Execution time/clock cycles)
+## Observations (Execution time/clock cycles, results)
 
-When observing the execution time in clocks, this number (implemented as start_t, end_t, total_t, and elapsed_t) varies differently whenever you execute it. This program has been tested on Windows, MacOS, and Linux operating systems.
+When observing the execution time in clocks, this number (implemented as start_t, end_t, total_t, and elapsed_t) varies differently whenever you execute it. This program has been tested on Windows, MacOS, and Linux operating systems. 
 
 ### MacOS, Intel i5 Quad-Core CPU
 
@@ -39,3 +39,5 @@ Executing with multitheading mode gives us roughly ~200000 clocks and a total ti
 ### Conclusion
 
 Theoretically, multithreading should be faster than regular mode, which uses a single main thread for our operations, but when testing our program on different operating systems, majority of them end up having our multithreading solution having more clock cycles than regular mode. However, this depends on many factors. There may be ways our program can be implemented better or a better way to parallelize our tasks so that every task can truly be running in parallel with multiple threads.
+
+Differences in thread execution can also be noticed by the different orderings that our city data prints at. With regular mode, we can expect our results to appear in the exact order that we pass through our filepaths but with multithreading mode, the ordering varies. This may be caused by different threads being created and going into our critical sections before its predecessors can.

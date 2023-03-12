@@ -6,10 +6,21 @@
 #include <pthread.h>
 #include <time.h>
 
+struct totalMax {
+    char* fileName;
+    float temp;
+};
+struct totalMin {
+    char* fileName;
+    float temp;
+};
+struct totalMax tMax;
+struct totalMin tMin;
 char line[500];
 float data[2];
 float maxTemp;
 float minTemp;
+int totalEntries;
 int entryCount;
 float averageTemp;
 pthread_mutex_t mutex;
@@ -49,12 +60,10 @@ void process_file(char* fileName) {
         printf("Error\n");
         exit(0);
     }
-
     maxTemp = -1000;
     minTemp = 1000;
     entryCount = 0;
     averageTemp = 0;
-
     if(file == NULL) {
         return;
     }
@@ -72,7 +81,15 @@ void process_file(char* fileName) {
     }
     entryCount -= 1;
     entryCount *= 2;
-
+    totalEntries += entryCount;
+    if(maxTemp > tMax.temp) {
+        tMax.temp = maxTemp;
+        tMax.fileName = fileName;
+    }
+    if(minTemp < tMin.temp) {
+        tMin.temp = minTemp;
+        tMin.fileName = fileName;
+    }
     printData(fileName,maxTemp,minTemp,entryCount,averageTemp);
     fclose(file);
 }
@@ -115,14 +132,12 @@ main(int argc, char* argv[])
         "data_files/Victoria.dat",
         "data_files/Winnipeg.dat"
     };
-
     pthread_mutex_init(&mutex,NULL);
     start_t = clock();
     if(argc > 2)  {
         inputError();
         return 1;
     }
-
     //Multithreading mode
     if(argc == 2) {
         pthread_t tid[10];
@@ -145,9 +160,12 @@ main(int argc, char* argv[])
             end_t = clock();
             total_t = (double)(end_t-start_t)/CLOCKS_PER_SEC;
             elapsed_t = end_t-start_t;
-        
+
+            printf("Total values processed of all files: %d\n", totalEntries);
+            printf("Lowest overall temperature: %0.1f reported in %s\n", tMin.temp, tMin.fileName);
+            printf("Highest overall temperature: %0.1f reported in %s\n",  tMax.temp, tMax.fileName);
             printf("Elapsed time: %ld clocks\n", elapsed_t);
-            printf("Total Multithreading time is %f\n", total_t);
+            printf("Total Multithreading time is %0.3f\n", total_t);
             printf("\n");
             return 0;
         } else {
@@ -155,7 +173,6 @@ main(int argc, char* argv[])
             return 1;
         }
     }
-    
     //Regular mode
     for(int i = 0; i<10; i++) {
         process_file(filePath[i]);
@@ -165,8 +182,11 @@ main(int argc, char* argv[])
     total_t = (double)(end_t-start_t)/CLOCKS_PER_SEC;
     elapsed_t = end_t-start_t;
    
+    printf("Total values processed of all files: %d\n", totalEntries);
+    printf("Lowest overall temperature: %0.1f reported in %s\n", tMin.temp, tMin.fileName);
+    printf("Highest overall temperature: %0.1f reported in %s\n",  tMax.temp, tMax.fileName);
     printf("Elapsed time: %ld clocks\n", elapsed_t);
-    printf("Total time is %f\n", total_t);
+    printf("Total time is %0.3f\n", total_t);
     printf("\n");
 	return 0;
 }
