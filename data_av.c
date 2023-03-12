@@ -34,7 +34,7 @@ void printData(char* fileName, float maximumTemp,  float minimumTemp, int entrie
     printf("Maximum temperature: %0.1f\n", maximumTemp);
     printf("Minimum temperature: %0.1f\n", minimumTemp);
     printf("Average temperature: %0.1f\n", averageTemp/entries);
-    printf("Total values processed: %d\n", entries);
+    printf("Total values processed (Max & Min): %d\n", entries);
     printf("\n");
 }
 
@@ -71,6 +71,7 @@ void process_file(char* fileName) {
         entryCount++;
     }
     entryCount -= 1;
+    entryCount *= 2;
 
     printData(fileName,maxTemp,minTemp,entryCount,averageTemp);
     fclose(file);
@@ -156,7 +157,6 @@ main(int argc, char* argv[])
     }
     
     //Regular mode
-    pthread_t tid;
     for(int i = 0; i<10; i++) {
         process_file(filePath[i]);
         usleep((useconds_t)0.0001);
