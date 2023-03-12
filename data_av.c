@@ -42,9 +42,9 @@ void inputError() {
 void printData(char* fileName, float maximumTemp,  float minimumTemp, int entries, float averageTemp) {
     printf("===================================================\n");
     printf("Data for: %s\n", fileName);
-    printf("Maximum temperature: %0.1f\n", maximumTemp);
-    printf("Minimum temperature: %0.1f\n", minimumTemp);
-    printf("Average temperature: %0.1f\n", averageTemp/entries);
+    printf("Maximum temperature: %0.1f degrees Celsius\n", maximumTemp);
+    printf("Minimum temperature: %0.1f degrees Celsius\n", minimumTemp);
+    printf("Average temperature: %0.2f degrees Celsius\n", averageTemp/entries);
     printf("Total values processed (Max & Min): %d\n", entries);
     printf("\n");
 }
@@ -162,8 +162,8 @@ main(int argc, char* argv[])
             elapsed_t = end_t-start_t;
 
             printf("Total values processed of all files: %d\n", totalEntries);
-            printf("Lowest overall temperature: %0.1f reported in %s\n", tMin.temp, tMin.fileName);
-            printf("Highest overall temperature: %0.1f reported in %s\n",  tMax.temp, tMax.fileName);
+            printf("Lowest overall temperature: %0.1f degrees Celsius, reported in %s\n", tMin.temp, tMin.fileName);
+            printf("Highest overall temperature: %0.1f degrees Celsius, reported in %s\n",  tMax.temp, tMax.fileName);
             printf("Elapsed time: %ld clocks\n", elapsed_t);
             printf("Total Multithreading time is %0.3f\n", total_t);
             printf("\n");
@@ -183,8 +183,8 @@ main(int argc, char* argv[])
     elapsed_t = end_t-start_t;
    
     printf("Total values processed of all files: %d\n", totalEntries);
-    printf("Lowest overall temperature: %0.1f reported in %s\n", tMin.temp, tMin.fileName);
-    printf("Highest overall temperature: %0.1f reported in %s\n",  tMax.temp, tMax.fileName);
+    printf("Lowest overall temperature: %0.1f degrees Celsius, reported in %s\n", tMin.temp, tMin.fileName);
+    printf("Highest overall temperature: %0.1f degrees Celsius, reported in %s\n",  tMax.temp, tMax.fileName);
     printf("Elapsed time: %ld clocks\n", elapsed_t);
     printf("Total time is %0.3f\n", total_t);
     printf("\n");
