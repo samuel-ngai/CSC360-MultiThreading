@@ -14,4 +14,28 @@ In singlethreaded mode, we simply utilize a single thread to parse a file, and t
 
 In multithreaded mode, we utilize ten threads (one for each city). To avoid overlapping of editing our global variables, we utilize mutexes as well as critical sections in our code so that at most only one thread can be calculating, updating, and printing our global maximum, minimum, and average temperatures.
 
-In addition to simply calculating maximum, minimum, and average temperatures and entry counts, we calculate the number of clock cycles and overall time our system takes to complete all our tasks. We achieve this by taking the number of clock cycles at the beginning and subtracting it from our ending number of clock cycles. We then divide this number by *CLOCKS_PER_SEC* to obtain the total time taken for our computation.
+In addition to simply calculating maximum, minimum, and average temperatures and entry counts, we calculate the number of clock cycles utilizing  *clock()* and the overall time our system takes to complete all our tasks. We achieve this by taking the number of clock cycles at the beginning of our regular or multithreading tasks and subtracting it from our ending number of clock cycles. We then divide this number by *CLOCKS_PER_SEC* to obtain the total time taken for our computation.
+
+## Observations (Execution time/clock cycles)
+
+When observing the execution time in clocks, this number (implemented as start_t, end_t, total_t, and elapsed_t) varies differently whenever you execute it. This program has been tested on Windows, MacOS, and Linux operating systems.
+
+### MacOS, Intel i5 Quad-Core CPU
+
+When executing with regular mode, the range of values for our elapsed time is ~110000 clocks and a total time of ~0.11 when dividing our total clocks by *CLOCKS_PER_SEC*
+
+Executing with multitheading mode gives us roughly ~120000 clocks and a total time of ~0.12 when dividing our total clocks by *CLOCKS_PER_SEC*
+
+### Linux, UVic Linux Server, specs unknown
+
+When executing with regular mode, the range of values for our elapsed time is ~165000 clocks and a total time of ~0.165 when dividing our total clocks by *CLOCKS_PER_SEC*
+
+Executing with multitheading mode gives us roughly ~200000 clocks and a total time of ~0.2 when dividing our total clocks by *CLOCKS_PER_SEC*
+
+### Windows, AMD Ryzen 5 3600 6-Core 12-Thread CPU
+
+//TODO
+
+### Conclusion
+
+Theoretically, multithreading should be faster than regular mode, which uses a single main thread for our operations, but when testing our program on different operating systems, majority of them end up having our multithreading solution having more clock cycles than regular mode. However, this depends on many factors. There may be ways our program can be implemented better or a better way to parallelize our tasks so that every task can truly be running in parallel with multiple threads.
