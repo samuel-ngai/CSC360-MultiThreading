@@ -165,7 +165,7 @@ main(int argc, char* argv[])
             printf("Lowest overall temperature: %0.1f degrees Celsius, reported in %s\n", tMin.temp, tMin.fileName);
             printf("Highest overall temperature: %0.1f degrees Celsius, reported in %s\n",  tMax.temp, tMax.fileName);
             printf("Elapsed time: %ld clocks\n", elapsed_t);
-            printf("Total Multithreading time is %0.3f\n", total_t);
+            printf("Total Multithreading time is %0.3fs\n", total_t);
             printf("\n");
             return 0;
         } else {
@@ -186,7 +186,7 @@ main(int argc, char* argv[])
     printf("Lowest overall temperature: %0.1f degrees Celsius, reported in %s\n", tMin.temp, tMin.fileName);
     printf("Highest overall temperature: %0.1f degrees Celsius, reported in %s\n",  tMax.temp, tMax.fileName);
     printf("Elapsed time: %ld clocks\n", elapsed_t);
-    printf("Total time is %0.3f\n", total_t);
+    printf("Total time is %0.3fs\n", total_t);
     printf("\n");
 	return 0;
 }
