@@ -1,6 +1,5 @@
 COMPILER= gcc
 OPTIONS = -g
-LDFLAGS  = -lreadline
 COMPILE = $(COMPILER) $(OPTIONS) 
 BUILD = build
 PROGRAM = data_av.c
