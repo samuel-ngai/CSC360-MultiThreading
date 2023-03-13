@@ -22,19 +22,21 @@ When observing the execution time in clocks, this number (implemented as start_t
 
 ### MacOS, Intel i5 Quad-Core CPU
 
-When executing with regular mode, the range of values for our elapsed time is ~110000 clocks and a total time of ~0.11 when dividing our total clocks by *CLOCKS_PER_SEC*
+When executing with regular mode, the range of values for our elapsed time is ~110000 clocks and a total time of ~0.11s when dividing our total clocks by *CLOCKS_PER_SEC*
 
-Executing with multitheading mode gives us roughly ~120000 clocks and a total time of ~0.12 when dividing our total clocks by *CLOCKS_PER_SEC*
+Executing with multitheading mode gives us roughly ~120000 clocks and a total time of ~0.12s when dividing our total clocks by *CLOCKS_PER_SEC*
 
 ### Linux, UVic Linux Server, specs unknown
 
-When executing with regular mode, the range of values for our elapsed time is ~165000 clocks and a total time of ~0.165 when dividing our total clocks by *CLOCKS_PER_SEC*
+When executing with regular mode, the range of values for our elapsed time is ~165000 clocks and a total time of ~0.165s when dividing our total clocks by *CLOCKS_PER_SEC*
 
-Executing with multitheading mode gives us roughly ~200000 clocks and a total time of ~0.2 when dividing our total clocks by *CLOCKS_PER_SEC*
+Executing with multitheading mode gives us roughly ~200000 clocks and a total time of ~0.2s when dividing our total clocks by *CLOCKS_PER_SEC*
 
 ### Windows, AMD Ryzen 5 3600 6-Core 12-Thread CPU
 
-//TODO
+When executing with regular mode, the range of values for our elapsed time is ~110 clocks and a total time of ~0.11s when dividing our total clocks by *CLOCKS_PER_SEC*
+
+Executing with multitheading mode gives us roughly ~114 clocks and a total time of ~0.114s when dividing our total clocks by *CLOCKS_PER_SEC*
 
 ### Conclusion
 
